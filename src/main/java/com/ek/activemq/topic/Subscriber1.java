@@ -1,4 +1,4 @@
-package com.ek.activemq.ps;
+package com.ek.activemq.topic;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -42,7 +42,7 @@ public class Subscriber1 {
       // 启动连接
       connection.start();
       // 创建session.参数1:订阅者不加事务,参数2:确认客户收到订阅消息的方式
-      session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+      session = connection.createSession(Boolean.FALSE, Session.AUTO_ACKNOWLEDGE);
       // 创建消息队列要和发布的消息队列名称对应
       destination = session.createTopic("FristTopic1");
       // 创建消息订阅者

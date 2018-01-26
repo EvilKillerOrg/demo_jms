@@ -1,4 +1,4 @@
-package com.ek.activemq.ps;
+package com.ek.activemq.topic;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -16,16 +16,16 @@ import org.slf4j.LoggerFactory;
  * @author: ek
  * @date: 2018年1月27日 上午3:01:58
  */
-public class Subscriber1Listener implements MessageListener {
+public class Subscriber2Listener implements MessageListener {
 
-  private Logger log = LoggerFactory.getLogger(Subscriber1Listener.class);
+  private Logger log = LoggerFactory.getLogger(Subscriber2Listener.class);
 
   // 消息监听
   @Override
   public void onMessage(Message msg) {
     try {
       TextMessage message = (TextMessage) msg;
-      log.info("订阅者1 收到的消息: " + message.getText());
+      log.info("订阅者2 收到的消息: " + message.getText());
     } catch (JMSException e) {
       e.printStackTrace();
     }

@@ -1,4 +1,4 @@
-package com.ek.activemq.ps;
+package com.ek.activemq.queue;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -14,50 +14,50 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 消息发布者
- * Publish/Subscribe 模式需要先订阅,才能收到发布的消息,先运行订阅者
+ * 消息生产者
+ * p2p模式是先生产消息再消费消息,先运行生产者
  * 
- * @ClassName: Publisher
+ * @ClassName: Producer
  * @Description: TODO
  * @author: ek
  * @date: 2018年1月26日 下午11:09:29
  */
 
-public class Publisher {
+public class Producer {
 
-  private static Logger log = LoggerFactory.getLogger(Publisher.class);
+  private static Logger log = LoggerFactory.getLogger(Producer.class);
 
   private static final String USERNAME = ActiveMQConnection.DEFAULT_USER; // 默认的连接用户名
   private static final String PASSWORD = ActiveMQConnection.DEFAULT_PASSWORD; // 默认的连接密码
   private static final String BROKERURL = ActiveMQConnection.DEFAULT_BROKER_URL; // 默认的连接地址
-  private static final int SENDNUM = 10; // 发布的消息数量
+  private static final int SENDNUM = 10; // 发送的消息数量
 
-  /* 创建发布者 */
+  /* 创建生产者 */
   public static void main(String[] args) {
 
     ConnectionFactory connectionFactory; // JMS连接工厂
     Connection connection = null; // JMS连接
-    Session session; // JMS会话 接收订阅或者发布消息的线程
+    Session session; // JMS会话 消费或者发送消息的线程
     Destination destination; // JMS消息的目的地
-    MessageProducer messageProducer; // JMS消息发布者
+    MessageProducer messageProducer; // JMS消息生产者
 
     // 实例化连接工厂
-    connectionFactory = new ActiveMQConnectionFactory(Publisher.USERNAME, Publisher.PASSWORD, Publisher.BROKERURL);
+    connectionFactory = new ActiveMQConnectionFactory(Producer.USERNAME, Producer.PASSWORD, Producer.BROKERURL);
 
     try {
       // 通过连接工厂获取连接
       connection = connectionFactory.createConnection();
       // 启动连接
       connection.start();
-      // 创建session.参数1:是否加事务,参数2:确认客户收到订阅消息的方式
-      session = connection.createSession(true, Session.AUTO_ACKNOWLEDGE);
-      // 创建消息主题
-      destination = session.createTopic("FristTopic1");
-      // 创建消息发布者
+      // 创建session.参数1:是否加事务,参数2:确认客户收到消息的方式
+      session = connection.createSession(Boolean.TRUE, Session.AUTO_ACKNOWLEDGE);
+      // 创建消息队列
+      destination = session.createQueue("FristQueue1");
+      // 创建消息生产者
       messageProducer = session.createProducer(destination);
-      // 发布消息
-      Publisher.sendMessage(session, messageProducer);
-      // session加了事务,所以这要提交一下才会真正发布.
+      // 发送消息
+      Producer.sendMessage(session, messageProducer);
+      // session加了事务,所以这要提交一下才会真正发送.
       session.commit();
     } catch (JMSException e) {
       e.printStackTrace();
@@ -73,12 +73,12 @@ public class Publisher {
     }
   }
 
-  /* 发布消息 */
+  /* 发送消息 */
   public static void sendMessage(Session session, MessageProducer messageProducer) throws JMSException {
-    for (int i = 0; i < Publisher.SENDNUM; i++) {
+    for (int i = 0; i < Producer.SENDNUM; i++) {
       TextMessage message = session.createTextMessage("ActiveMQ消息-" + i);
-      log.info("发布的消息: ActiveMQ消息-" + i);
-      messageProducer.send(message); // 发布消息
+      log.info("发送的消息: ActiveMQ消息-" + i);
+      messageProducer.send(message); // 发送消息
     }
 
   }
