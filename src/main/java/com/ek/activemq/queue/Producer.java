@@ -37,7 +37,7 @@ public class Producer {
 
     ConnectionFactory connectionFactory; // JMS连接工厂
     Connection connection = null; // JMS连接
-    Session session; // JMS会话 消费或者发送消息的线程
+    Session session = null; // JMS会话 消费或者发送消息的线程
     Destination destination; // JMS消息的目的地
     MessageProducer messageProducer; // JMS消息生产者
 
@@ -62,9 +62,15 @@ public class Producer {
     } catch (JMSException e) {
       e.printStackTrace();
     } finally {
+      if (session != null) {
+        try {
+          session.close();
+        } catch (JMSException e) {
+          e.printStackTrace();
+        }
+      }
       if (connection != null) {
         try {
-          // 关闭连接(严格意义上所有的都要关闭)
           connection.close();
         } catch (JMSException e) {
           e.printStackTrace();

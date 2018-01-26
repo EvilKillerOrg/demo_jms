@@ -31,7 +31,7 @@ public class ConsumerOfListener {
 
     ConnectionFactory connectionFactory; // JMS连接工厂
     Connection connection = null; // JMS连接
-    Session session; // JMS会话 消费或者发送消息的线程
+    Session session = null; // JMS会话 消费或者发送消息的线程
     Destination destination; // JMS消息的目的地
     MessageConsumer messageConsumer; // JMS消息消费者
 
@@ -59,6 +59,13 @@ public class ConsumerOfListener {
     } catch (JMSException e) {
       e.printStackTrace();
     } finally {
+      if (session != null) {
+        try {
+          session.close();
+        } catch (JMSException e) {
+          e.printStackTrace();
+        }
+      }
       if (connection != null) {
         try {
           connection.close();
