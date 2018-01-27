@@ -51,7 +51,7 @@ public class Publisher {
       connection.start();
       // 创建session.参数1:是否加事务,参数2:确认客户收到订阅消息的方式
       session = connection.createSession(Boolean.TRUE, Session.AUTO_ACKNOWLEDGE);
-      // 创建消息主题
+      // 创建消息主题(目的地是Topic,目的地一把指Queue或Topic)
       destination = session.createTopic("FristTopic1");
       // 创建消息发布者
       messageProducer = session.createProducer(destination);

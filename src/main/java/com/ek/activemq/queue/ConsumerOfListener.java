@@ -13,7 +13,7 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 /**
  * 消息消费者 
  * 这个是实际开发中常用的方式 
- * 使用监听器,生产者生产出来就通知消费者去拿
+ * 使用监听器(异步消费),生产者生产出来就通知消费者去拿
  * 
  * @ClassName: ConsumerOfListener
  * @Description: TODO
@@ -45,7 +45,7 @@ public class ConsumerOfListener {
       connection.start();
       // 创建session.参数1:消费者不加事务,参数2:确认客户收到消息的方式
       session = connection.createSession(Boolean.FALSE, Session.AUTO_ACKNOWLEDGE);
-      // 创建消息队列要和生产的消息队列名称对应
+      // 创建消息队列要和生产的消息队列名称对应,目的地也一样
       destination = session.createQueue("FristQueue1");
       // 创建消息消费者
       messageConsumer = session.createConsumer(destination);

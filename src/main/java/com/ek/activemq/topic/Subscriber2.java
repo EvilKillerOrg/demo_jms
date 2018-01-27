@@ -43,7 +43,7 @@ public class Subscriber2 {
       connection.start();
       // 创建session.参数1:订阅者不加事务,参数2:确认客户收到订阅消息的方式
       session = connection.createSession(Boolean.FALSE, Session.AUTO_ACKNOWLEDGE);
-      // 创建消息队列要和发布的消息队列名称对应
+      // 创建消息队列要和发布的消息队列名称对应,目的地也一样
       destination = session.createTopic("FristTopic1");
       // 创建消息订阅者
       messageConsumer = session.createConsumer(destination);

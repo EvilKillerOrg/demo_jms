@@ -43,7 +43,8 @@ public class Producer {
 
     // 实例化连接工厂
     connectionFactory = new ActiveMQConnectionFactory(Producer.USERNAME, Producer.PASSWORD, Producer.BROKERURL);
-
+    //connectionFactory = new ActiveMQConnectionFactory("tcp://10.0.0.77:61616");
+     
     try {
       // 通过连接工厂获取连接
       connection = connectionFactory.createConnection();
@@ -51,7 +52,7 @@ public class Producer {
       connection.start();
       // 创建session.参数1:是否加事务,参数2:确认客户收到消息的方式
       session = connection.createSession(Boolean.TRUE, Session.AUTO_ACKNOWLEDGE);
-      // 创建消息队列
+      // 创建消息队列(目的地是Queue,目的地一把指Queue或Topic)
       destination = session.createQueue("FristQueue1");
       // 创建消息生产者
       messageProducer = session.createProducer(destination);
